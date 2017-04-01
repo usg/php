@@ -1,0 +1,164 @@
+有5个人偷了一堆苹果，准备在第二天分赃。晚上，有一人遛出来，把所有菜果分成5份，但是多了一个，顺手把这个扔给树上的猴了，自己先拿1/5藏了。没想到其他四人也都是这么想的，都如第一个人一样分成5份把多的那一个扔给了猴，偷走了1/5。第二天，大家分赃，也是分成5份多一个扔给猴了。最后一人分了一份。问：共有多少苹果？
+
+按 Ctrl+C 复制代码
+
+for ($i = 1; ; $i++)
+{
+    if ($i%5 == 1) {
+        //第一个人取五分之一，还剩$t
+        $t = $i - round($i/5) - 1;      
+        if($t % 5 == 1)
+        {
+            //第二个人取五分之一，还剩$r
+            $r = $t - round($t/5) - 1;      
+            if($r % 5 == 1)
+            {
+                //第三个人取五分之一，还剩$s
+                $s = $r - round($r/5) - 1;              
+                if($s % 5 == 1)
+                {
+                    //第四个人取五分之一，还剩$x
+                    $x = $s - round($s/5) - 1;                  
+                    if($x % 5 == 1)
+                    {
+                        //第五个人取五分之一，还剩$y
+                        $y = $x - round($x/5) - 1;                      
+                        if ($y % 5 == 1) {
+                            echo $i;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+按 Ctrl+C 复制代码
+一群猴子排成一圈，按1，2，…，n依次编号。然后从第1只开始数，数到第m只,把它踢出圈，从它后面再开始数，再数到第m只，在把它踢出去…，如此不停的进行下去，直到最后只剩下一只猴子为止，那只猴子就叫做大王。要求编程模拟此过程，输入m、n, 输出最后那个大王的编号。
+
+复制代码
+function king($n, $m){
+    $monkeys = range(1, $n);
+    $i=0;
+    $k=$n;
+    while (count($monkeys)>1) {
+        if(($i+1)%$m==0) {
+            unset($monkeys[$i]);
+        } else {
+            array_push($monkeys,$monkeys[$i]);
+            unset($monkeys[$i]);
+        }
+        $i++;
+    }
+    return current($monkeys);
+}
+ 
+$a = king(5, 2);
+var_dump($a);
+复制代码
+汉诺塔（又称河内塔）问题是印度的一个古老的传说。开天辟地的神勃拉玛在一个庙里留下了三根金刚石的棒，第一根上面套着64个圆的金片，最大的一个在底下，其余一个比一个小，依次叠上去，庙里的众僧不倦地把它们一个个地从这根棒搬到另一根棒上，规定可利用中间的一根棒作为帮助，但每次只能搬一个，而且大的不能放在小的上面。解答结果请自己运行计算，程序见尾部。面对庞大的数字(移动圆片的次数)18446744073709551615，看来，众僧们耗尽毕生精力也不可能完成金片的移动。
+后来，这个传说就演变为汉诺塔游戏:
+1.有三根杆子A,B,C。A杆上有若干碟子
+2.每次移动一块碟子,小的只能叠在大的上面
+3.把所有碟子从A杆全部移到C杆上
+经过研究发现，汉诺塔的破解很简单，就是按照移动规则向一个方向移动金片：
+如3阶汉诺塔的移动：A→C,A→B,C→B,A→C,B→A,B→C,A→C
+此外，汉诺塔问题也是程序设计中的经典递归问题。
+
+复制代码
+function hanoi($n,$x,$y,$z){
+    if($n==1){
+        echo 'move disk 1 from '.$x.' to '.$z."\n";
+    }else{
+        hanoi($n-1,$x,$z,$y);
+        echo 'move disk '.$n.' from '.$x.' to '.$z."\n";
+        hanoi($n-1,$y,$x,$z);
+    }     
+}
+hanoi(3,'A','B','C');
+复制代码
+使用PHP描述冒泡排序和快速排序算法，对象可以是一个数组
+
+复制代码
+//对数组冒泡排序
+function bubble_sort($array){
+    $count = count($array);
+    if ($count <= 0) 
+        return false;
+        for($i=0; $i<$count; $i++){
+            for($j=$count-1; $j>$i; $j–){
+            if ($array[$j] < $array[$j-1]){
+                $tmp = $array[$j];
+                $array[$j] = $array[$j-1];
+                $array[$j-1] = $tmp;
+        }
+    }
+}
+return $array;
+}
+复制代码
+复制代码
+function quick_sort($array) {
+    if (count($array) <= 1) return $array;
+    $key = $array[0];
+    $left_arr = array();
+    $right_arr = array();
+    for ($i=1; $i<count($array); $i++){
+ 
+    if ($array[$i] <= $key)
+ 
+        $left_arr[] = $array[$i];
+    else
+        $right_arr[] = $array[$i];
+    }
+    $left_arr = quick_sort($left_arr);
+    $right_arr = quick_sort($right_arr);
+    return array_merge($left_arr, array($key), $right_arr);
+}
+复制代码
+使用PHP描述顺序查找和二分查找算法，顺序查找必须考虑效率，对象可以是一个有序数组
+
+复制代码
+//使用二分查找数组中某个元素
+function bin_sch($array, $low, $high, $k){
+    if ($low <= $high){
+        $mid = intval(($low+$high)/2);
+        if ($array[$mid] == $k){
+            return $mid;
+        }elseif ($k < $array[$mid]){
+        return bin_sch($array, $low, $mid-1, $k);
+    }else{
+        return bin_sch($array, $mid+1, $high, $k);
+    }
+    }
+    return -1;
+}
+复制代码
+写一个二维数组排序算法函数，可以调用php内置函数，能够具有通用性
+
+复制代码
+function array_sort($arr, $keys, $order=0) {
+    if (!is_array($arr)) {
+        return false;
+    }
+    $keysvalue = array();
+    foreach($arr as $key => $val) {
+        $keysvalue[$key] = $val[$keys];
+    }
+    if($order == 0){
+        asort($keysvalue);
+    }else {
+        arsort($keysvalue);
+    }
+    reset($keysvalue);
+    foreach($keysvalue as $key => $vals) {
+        $keysort[$key] = $key;
+    }
+    $new_array = array();
+    foreach($keysort as $key => $val) {
+        $new_array[$key] = $arr[$val];
+    }
+    return $new_array;
+}
+复制代码
+ 
